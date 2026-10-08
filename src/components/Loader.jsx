@@ -7,14 +7,14 @@ export default function Loader({ onDone }) {
   }, [])
   useEffect(() => {
     if (p >= 100) {
-      const a = setTimeout(() => setOut(true), 350), b = setTimeout(onDone, 1100)
+      const a = setTimeout(() => setOut(true), 350), b = setTimeout(onDone, 1400)
       return () => { clearTimeout(a); clearTimeout(b) }
     }
   }, [p])
   return (
     <div className={'loader' + (out ? ' out' : '')}>
-      <div className="ld-logo"><span>MS</span><i /></div>
-      <h4>Muhammad Saad</h4>
+      <div className="ld-logo"><img src="/saad.jpg" alt="" /><i /></div>
+      <h4>{'Muhammad Saad'.split('').map((c, i) => <span key={i} style={{ '--i': i }}>{c === ' ' ? '\u00a0' : c}</span>)}</h4>
       <p>Loading portfolio…</p>
       <div className="ld-bar"><b style={{ width: p + '%' }} /></div>
       <small>{p}%</small>
