@@ -7,7 +7,7 @@ export default function About() {
       <div className="grid g2">
         <Reveal><div className="card">
           <h3>{D.name}</h3><p className="m" style={{ marginBottom: 12 }}>📍 {D.loc}</p>
-          <p className="m">{D.sum} I work across C#, ASP.NET Core, React.js, Node.js, TypeScript, Redux Toolkit, MongoDB and PostgreSQL, with strong focus on clean architecture, database optimization and application security.</p>
+          <p className="m">{D.sum} I work across C#, ASP.NET Core 10, Blazor, React.js, Node.js, TypeScript, Redux Toolkit, MongoDB and PostgreSQL, with a strong focus on clean architecture, database optimization and application security.</p>
           <div className="stats">{D.stats.map(([a, b]) => <div className="card stat" key={b}><b className="grad">{a}</b><span>{b}</span></div>)}</div>
         </div></Reveal>
         <Reveal d={150}><div className="card" style={{ height: '100%' }}>

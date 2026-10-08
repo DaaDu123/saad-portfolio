@@ -1,6 +1,6 @@
 import { D } from '../data'
 import { Reveal, Head } from './ui'
-const list = ['React', 'TypeScript', 'C#', '.NET', 'ASP.NET Core', 'Node.js', 'Express.js', 'SQL Server', 'PostgreSQL', 'MongoDB', 'Redux', 'Tailwind', 'SignalR', 'JWT', 'EF Core']
+const list = ['React', 'TypeScript', 'C#', '.NET', 'ASP.NET Core 10', 'Blazor', 'Clean Architecture', 'CQRS', 'Node.js', 'Express.js', 'SQL Server', 'PostgreSQL', 'MongoDB', 'Redux', 'Tailwind', 'SignalR', 'JWT', 'EF Core']
 export default function Skills() {
   return (
     <section id="skills"><div className="wrap">

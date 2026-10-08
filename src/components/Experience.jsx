@@ -3,7 +3,7 @@ import { Reveal, Head } from './ui'
 export default function Experience() {
   return (
     <section id="experience"><div className="wrap">
-      <Head t="Experience" h={<>Professional <span className="grad">Journey</span></>} s="Building solutions across healthcare, events and enterprise platforms." />
+      <Head t="Experience" h={<>Professional <span className="grad">Journey</span></>} s="Building solutions across e-commerce, public service, legal, healthcare and event platforms." />
       <div className="tl">{D.exp.map((e, i) => (
         <Reveal key={e.c} d={i * 120} className="it"><div className="card">
           <span className="yr">{e.y}</span><h3>{e.r}</h3><p className="m" style={{ marginBottom: 10 }}>{e.c}</p>

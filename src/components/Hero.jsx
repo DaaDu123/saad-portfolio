@@ -1,6 +1,6 @@
 import { D } from '../data'
 import { Typing } from './ui'
-const tech = ['React', '.NET', 'C#', 'SQL Server']
+const tech = ['React', '.NET', 'C#', 'Blazor']
 export default function Hero() {
   return (
     <section id="home">
@@ -12,7 +12,7 @@ export default function Hero() {
           <h1><span className="shim">{D.name}</span></h1>
           <Typing />
           <p style={{ margin: '16px 0', maxWidth: 540, color: 'var(--muted)' }}>
-            I build scalable, secure and beautiful web applications with C#, ASP.NET Core, React.js and Node.js.
+            I build scalable, secure and beautiful web applications with C#, ASP.NET Core 10, Blazor, React.js and Node.js.
           </p>
           <div className="row">
             <a className="btn p" href="#projects">View Projects →</a>
@@ -31,7 +31,7 @@ export default function Hero() {
           <div className="ph-ring" />
           <div className="ph-core">MS</div>
           <div className="orb">{tech.map(t => <span className="tk" key={t}>{t}</span>)}</div>
-          <div className="fc f1"><b className="grad">4+ Years</b>Full-stack experience</div>
+          <div className="fc f1"><b className="grad">3+ Years</b>Full-stack experience</div>
           <div className="fc f2"><b className="grad">Secure APIs</b>JWT · OAuth · RBAC</div>
         </div>
       </div>
