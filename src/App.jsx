@@ -18,14 +18,14 @@ export default function App() {
   const [act, setAct] = useState('Home')
   const [hide, setHide] = useState(false)
   const last = useRef(0)
-  const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const [dark, setDark] = useState(true)
   const bar = useRef()
 
   useEffect(() => { document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light') }, [dark])
   useEffect(() => { document.body.style.overflow = loading ? 'hidden' : '' }, [loading])
   useEffect(() => {
     const f = () => {
-      setSc(scrollY > 20)
+      setSc(scrollY > 20); document.documentElement.style.setProperty('--sy', scrollY)
       setHide(scrollY > 240 && scrollY > last.current); last.current = scrollY
       const h = document.documentElement.scrollHeight - innerHeight
       if (bar.current) bar.current.style.width = (scrollY / h) * 100 + '%'
@@ -46,29 +46,28 @@ export default function App() {
   }, [])
   useEffect(() => {
     const r = document.documentElement
-    let lc, lb
-    const clr = (el, ps) => el && ps.forEach(p => el.style.removeProperty(p))
+    const fine = matchMedia('(hover:hover) and (pointer:fine)').matches
+    const d = document.querySelector('.cd'), rg = document.querySelector('.cr'), lab = rg.firstChild
+    let x = 0, y = 0, rx = 0, ry = 0, raf, lb
+    if (fine) r.classList.add('hc')
     const m = e => {
       if (e.pointerType !== 'mouse') return
-      r.style.setProperty('--cx', e.clientX + 'px'); r.style.setProperty('--cy', e.clientY + 'px')
-      r.style.setProperty('--px', (e.clientX / innerWidth - .5).toFixed(3)); r.style.setProperty('--py', (e.clientY / innerHeight - .5).toFixed(3))
-      const c = e.target.closest?.('.card'), b = e.target.closest?.('.btn')
-      if (c) {
-        const k = c.getBoundingClientRect(), x = (e.clientX - k.left) / k.width, y = (e.clientY - k.top) / k.height
-        c.style.setProperty('--mx', x * 100 + '%'); c.style.setProperty('--my', y * 100 + '%')
-        if (c.tagName !== 'FORM') { c.style.setProperty('--rx', ((.5 - y) * 6).toFixed(2) + 'deg'); c.style.setProperty('--ry', ((x - .5) * 8).toFixed(2) + 'deg') }
-      }
-      if (b) { const k = b.getBoundingClientRect(); b.style.setProperty('--tx', (e.clientX - k.left - k.width / 2) * .22 + 'px'); b.style.setProperty('--ty', (e.clientY - k.top - k.height / 2) * .3 + 'px') }
-      if (lc !== c) clr(lc, ['--rx', '--ry']); if (lb !== b) clr(lb, ['--tx', '--ty'])
-      lc = c; lb = b
+      x = e.clientX; y = e.clientY; d.style.transform = `translate(${x}px,${y}px)`
+      r.style.setProperty('--px', (x / innerWidth - .5).toFixed(3)); r.style.setProperty('--py', (y / innerHeight - .5).toFixed(3))
+      const t = e.target.closest?.('a,button,input,textarea'), c = e.target.closest?.('[data-cur]'), b = e.target.closest?.('.btn')
+      rg.classList.toggle('big', !!t); rg.classList.toggle('lb', !!c); lab.textContent = c ? c.dataset.cur : ''
+      if (b) { const k = b.getBoundingClientRect(); b.style.setProperty('--tx', (x - k.left - k.width / 2) * .22 + 'px'); b.style.setProperty('--ty', (y - k.top - k.height / 2) * .3 + 'px') }
+      if (lb && lb !== b) { lb.style.removeProperty('--tx'); lb.style.removeProperty('--ty') }
+      lb = b
     }
-    addEventListener('pointermove', m)
-    return () => removeEventListener('pointermove', m)
+    const f = () => { rx += (x - rx) * .16; ry += (y - ry) * .16; rg.style.transform = `translate(${rx}px,${ry}px)`; raf = requestAnimationFrame(f) }
+    addEventListener('pointermove', m); if (fine) f()
+    return () => { removeEventListener('pointermove', m); cancelAnimationFrame(raf); r.classList.remove('hc') }
   }, [])
 
   return (
     <>
-      <div id="glow" />
+      <div className="cd" /><div className="cr"><span /></div>
       {loading && <Loader onDone={() => setLoading(false)} />}
       <div id="bar" ref={bar} />
       <Navbar sc={sc} act={act} dark={dark} setDark={setDark} hide={hide} />

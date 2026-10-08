@@ -11,8 +11,8 @@ export function Reveal({ children, d = 0, v = '', className = '', ...p }) {
   return <div ref={r} className={'rv ' + (v ? 'v-' + v + ' ' : '') + className} style={{ transitionDelay: d + 'ms' }} {...p}>{children}</div>
 }
 
-export function Head({ t, h, s }) {
-  return <Reveal v="b"><span className="tag">{t}</span><h2>{h}</h2><i className="hl" /><p className="sub">{s}</p></Reveal>
+export function Head({ n, t, h, s }) {
+  return <Reveal className="hd"><div className="mono"><span>{n}</span><span>{t}</span></div><h2><span className="ln"><span>{h}</span></span></h2>{s && <p className="sub">{s}</p>}</Reveal>
 }
 
 export function Typing() {
@@ -24,15 +24,15 @@ export function Typing() {
       const w = D.roles[i.current]
       c.current += del.current ? -1 : 1
       setS(w.slice(0, c.current))
-      let n = del.current ? 35 : 70
-      if (!del.current && c.current === w.length) { del.current = true; n = 1600 }
+      let n = del.current ? 30 : 65
+      if (!del.current && c.current === w.length) { del.current = true; n = 1700 }
       else if (del.current && c.current === 0) { del.current = false; i.current = (i.current + 1) % D.roles.length; n = 350 }
       t = setTimeout(tick, n)
     }
     tick()
     return () => clearTimeout(t)
   }, [])
-  return <div className="role grad">{s}<span className="cur" /></div>
+  return <div className="role">{s}<span className="cur" /></div>
 }
 
 export function Counter({ v }) {
@@ -51,32 +51,38 @@ export function Counter({ v }) {
   return <span ref={r}>{x}{s}</span>
 }
 
-export function Particles() {
+/* marquee whose speed reacts to scroll velocity */
+export function Marquee({ items, rev }) {
   const r = useRef()
   useEffect(() => {
-    const cv = r.current, x = cv.getContext('2d')
-    let w, h, P = [], raf, m = { x: -999, y: -999 }
-    const size = () => {
-      w = cv.width = cv.offsetWidth; h = cv.height = cv.offsetHeight
-      P = Array.from({ length: Math.min(70, (w * h / 14000) | 0) }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4 }))
-    }
-    const mv = e => { const k = cv.getBoundingClientRect(); m = { x: e.clientX - k.left, y: e.clientY - k.top } }
-    const line = (a, b, c, al) => { x.strokeStyle = `rgba(${c},${al})`; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke() }
-    const draw = () => {
-      x.clearRect(0, 0, w, h)
-      P.forEach((p, i) => {
-        p.x += p.vx; p.y += p.vy
-        if (p.x < 0 || p.x > w) p.vx *= -1
-        if (p.y < 0 || p.y > h) p.vy *= -1
-        x.fillStyle = 'rgba(129,140,248,.8)'; x.beginPath(); x.arc(p.x, p.y, 1.6, 0, 7); x.fill()
-        for (let j = i + 1; j < P.length; j++) { const d = Math.hypot(p.x - P[j].x, p.y - P[j].y); if (d < 120) line(p, P[j], '129,140,248', .28 * (1 - d / 120)) }
-        const d = Math.hypot(p.x - m.x, p.y - m.y); if (d < 170) line(p, m, '34,211,238', .55 * (1 - d / 170))
-      })
-      raf = requestAnimationFrame(draw)
-    }
-    size(); draw()
-    addEventListener('resize', size); addEventListener('pointermove', mv)
-    return () => { cancelAnimationFrame(raf); removeEventListener('resize', size); removeEventListener('pointermove', mv) }
+    let v = 0, p = scrollY, raf
+    const a = r.current.getAnimations?.()[0]
+    const f = () => { const d = Math.abs(scrollY - p); p = scrollY; v += (Math.min(d, 70) - v) * .08; if (a) a.playbackRate = 1 + v * .4; raf = requestAnimationFrame(f) }
+    f()
+    return () => cancelAnimationFrame(raf)
   }, [])
-  return <canvas ref={r} className="pcv" />
+  return <div className="mq"><div ref={r} className={'mt' + (rev ? ' rev' : '')}>{[0, 1].flatMap(j => items.map(t => <span key={t + j}>{t}</span>))}</div></div>
+}
+
+/* words light up as you scroll past */
+export function ScrollText({ t }) {
+  const r = useRef()
+  useEffect(() => {
+    const w = [...r.current.children]
+    const f = () => {
+      const k = r.current.getBoundingClientRect()
+      const p = Math.min(1, Math.max(0, (innerHeight * .85 - k.top) / (k.height + innerHeight * .3)))
+      w.forEach((s, i) => { s.style.opacity = (.16 + .84 * Math.min(1, Math.max(0, p * w.length * 1.15 - i))).toFixed(2) })
+    }
+    f(); addEventListener('scroll', f, { passive: true })
+    return () => removeEventListener('scroll', f)
+  }, [])
+  return <p ref={r} className="st">{t.split(' ').map((x, i) => <span key={i}>{x} </span>)}</p>
+}
+
+export function Clock() {
+  const f = () => new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit' })
+  const [t, setT] = useState(f)
+  useEffect(() => { const i = setInterval(() => setT(f()), 20000); return () => clearInterval(i) }, [])
+  return <>{t} PKT</>
 }

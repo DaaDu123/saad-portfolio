@@ -1,12 +1,8 @@
-import { Reveal, Head } from './ui'
-
+import { Reveal } from './ui'
 export default function Education() {
   return (
-    <section id="education"><div className="wrap">
-      <Head t="Education" h={<>Academic <span className="grad">Background</span></>} s="Foundation in software engineering principles." />
-      <Reveal v="z"><div className="card" style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
-        <div><span className="yr">2019 – 2023</span><h3>Bachelor's Degree in Computer Science</h3><p className="m">Gomal University, Dera Ismail Khan</p></div>
-      </div></Reveal>
+    <section id="education" style={{ paddingTop: 0 }}><div className="wrap">
+      <Reveal><div className="edu"><span className="mono">2019 – 2023</span><h3>Bachelor's Degree in Computer Science</h3><p style={{ color: 'var(--mut)' }}>Gomal University, Dera Ismail Khan</p></div></Reveal>
     </div></section>
   )
 }

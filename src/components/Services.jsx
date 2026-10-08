@@ -3,9 +3,9 @@ import { Reveal, Head } from './ui'
 export default function Services() {
   return (
     <section id="services"><div className="wrap">
-      <Head t="Services" h={<>What I <span className="grad">Offer</span></>} s="End-to-end development services for modern web applications." />
-      <div className="grid g4">{D.svc.map(([t, d], k) => (
-        <Reveal key={t} d={(k % 4) * 90} v="z"><div className="card" style={{ height: '100%' }}><div className="sv">{String(k + 1).padStart(2, '0')}</div><h3>{t}</h3><p className="m">{d}</p></div></Reveal>
+      <Head n="05" t="Services" h="What I can build for you." />
+      <div className="sv">{D.svc.map(([t, d], k) => (
+        <Reveal key={t} d={(k % 2) * 100}><div><span className="mono">{String(k + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{d}</p></div></Reveal>
       ))}</div>
     </div></section>
   )
